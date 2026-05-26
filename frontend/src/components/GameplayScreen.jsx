@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const BACKEND_URL = 'http://localhost:5000';
-
 function GameplayScreen({ gameData, onGameFinished }) {
   const { gameId, questionText, grid, correctCountNeeded } = gameData;
 
@@ -42,7 +40,7 @@ function GameplayScreen({ gameData, onGameFinished }) {
     
     setIsNetworkLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/game/timeout`, {
+      const response = await fetch(`/api/game/timeout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId })
@@ -73,7 +71,7 @@ function GameplayScreen({ gameData, onGameFinished }) {
 
     setIsNetworkLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/game/guess`, {
+      const response = await fetch(`/api/game/guess`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId, techId })

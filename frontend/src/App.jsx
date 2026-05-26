@@ -3,8 +3,6 @@ import StartScreen from './components/StartScreen';
 import GameplayScreen from './components/GameplayScreen';
 import ResultScreen from './components/ResultScreen';
 
-const BACKEND_URL = 'http://localhost:5000';
-
 function App() {
   const [screen, setScreen] = useState('start'); // 'start' | 'game' | 'result'
   const [gameData, setGameData] = useState(null);
@@ -15,7 +13,7 @@ function App() {
   const handleStartGame = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/game/start`, {
+      const response = await fetch(`/api/game/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });

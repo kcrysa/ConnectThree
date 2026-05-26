@@ -7,7 +7,7 @@ if (process.env.DATABASE_URL) {
   // Use connection string (standard for Render, Heroku, AWS, etc.)
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
-    logging: false,
+    logging: true,
     dialectOptions: {
       // Support SSL connections if needed by production hosting (e.g. Render/Heroku)
       ssl: process.env.DATABASE_URL.includes("localhost") || process.env.DATABASE_URL.includes("127.0.0.1") ? false : {
@@ -28,7 +28,7 @@ if (process.env.DATABASE_URL) {
     host: dbHost,
     port: dbPort,
     dialect: "postgres",
-    logging: false
+    logging: true
   });
 }
 

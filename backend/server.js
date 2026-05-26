@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const { sequelize, Technology, Question, Game } = require("./models/index");
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 5000;
 // Enable CORS for frontend accessibility
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.resolve(process.cwd(), "../frontend/dist")));
 
 // In-memory store for game sessions to keep them secure and backend-driven
 const activeGames = {};
@@ -251,10 +253,14 @@ app.post("/api/game/timeout", async (req, res) => {
   });
 });
 
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(process.cwd(), "../frontend/dist", "index.html"));
+});
+
 // Start Express server and connect/sync the PostgreSQL database
 async function startServer() {
   console.log("Checking database connection and seeding mock data...");
-  await seedDatabase();
+  // await seedDatabase();
 
   app.listen(PORT, () => {
     console.log(`========================================`);
