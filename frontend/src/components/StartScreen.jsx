@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function StartScreen({ onStart }) {
   return (
@@ -16,7 +16,7 @@ function StartScreen({ onStart }) {
           pointerEvents: "none",
         }}
       />
-
+      
       {/* Pulsing Play SVG Graphic Card */}
       <div className="play-svg-container">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -30,15 +30,7 @@ function StartScreen({ onStart }) {
           {/* Glowing Play Triangle */}
           <path d="M40,30 L73,50 L40,70 Z" />
           {/* Tech Circles orbits */}
-          <circle
-            cx="50"
-            cy="50"
-            r="42"
-            fill="none"
-            stroke="url(#playGrad)"
-            strokeWidth="2"
-            strokeDasharray="6 8"
-          />
+          <circle cx="50" cy="50" r="42" fill="none" stroke="url(#playGrad)" strokeWidth="2" strokeDasharray="6 8" />
         </svg>
       </div>
 
@@ -56,20 +48,20 @@ function StartScreen({ onStart }) {
         Can you find them in 40 seconds?
       </p>
 
-      <button
-        className="btn-primary"
+      <button 
+        className="btn-primary" 
         onClick={onStart}
         aria-label="Touch here to play DevTalks Trivia"
       >
         <span>Touch here to play</span>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
+        <svg 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="3" 
+          strokeLinecap="round" 
           strokeLinejoin="round"
         >
           <line x1="5" y1="12" x2="19" y2="12"></line>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 function ResultScreen({ gameResult, onReset }) {
   const { won, timeElapsed, questionText, guessesMade } = gameResult;
@@ -10,19 +10,19 @@ function ResultScreen({ gameResult, onReset }) {
     if (!won || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    
+    const ctx = canvas.getContext("2d");
+
     // Fit canvas to its relative parent container
     const resizeCanvas = () => {
       canvas.width = canvas.parentElement.offsetWidth;
       canvas.height = canvas.parentElement.offsetHeight;
     };
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     // Create particles
-    const colors = ['#00d2ff', '#7928ca', '#ff007a', '#00ff87', '#ffcc00'];
-    const particles = Array.from({ length: 60 }).map(() => ({
+    const colors = ["#E60000", "#9C2AA0", "#00d2ff", "#00ff87", "#ffcc00"];
+    const particles = Array.from({ length: 65 }).map(() => ({
       x: Math.random() * canvas.width,
       y: Math.random() * -canvas.height - 20,
       size: Math.random() * 8 + 5,
@@ -30,14 +30,12 @@ function ResultScreen({ gameResult, onReset }) {
       speedX: Math.random() * 4 - 2,
       speedY: Math.random() * 3 + 2,
       rotation: Math.random() * 360,
-      rotationSpeed: Math.random() * 4 - 2
+      rotationSpeed: Math.random() * 4 - 2,
     }));
 
     // Animation Loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      let activeParticles = false;
 
       particles.forEach((p) => {
         p.x += p.speedX;
@@ -52,8 +50,6 @@ function ResultScreen({ gameResult, onReset }) {
           p.y = -20;
           p.x = Math.random() * canvas.width;
           p.speedY = Math.random() * 3 + 2;
-        } else {
-          activeParticles = true;
         }
 
         // Draw particle
@@ -65,81 +61,109 @@ function ResultScreen({ gameResult, onReset }) {
         ctx.restore();
       });
 
-      if (activeParticles) {
-        animationFrameRef.current = requestAnimationFrame(animate);
-      }
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
     animate();
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      window.removeEventListener("resize", resizeCanvas);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
   }, [won]);
 
   return (
-    <div className="glass-panel fade-in" style={{ minHeight: '380px', position: 'relative' }}>
-      
-      {/* Confetti canvas rendered over container if Won */}
-      {won && (
-        <canvas 
-          ref={canvasRef} 
-          className="confetti-canvas"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', borderRadius: '24px' }}
-        />
-      )}
+    <div
+      className="glass-panel fade-in"
+      style={{ padding: "3.5rem 2rem", overflow: "hidden" }}
+    >
+      {won && <canvas ref={canvasRef} className="confetti-canvas" />}
 
-      {won ? (
-        // SUCCESS CASE
-        <>
-          <div className="animation-container">
-            <div className="success-halo">
-              <svg viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-          </div>
+      {/* Decorative Radial glow lights */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-10%",
+          left: "20%",
+          width: "250px",
+          height: "250px",
+          background: won
+            ? "radial-gradient(circle, rgba(0, 255, 135, 0.1) 0%, transparent 70%)"
+            : "radial-gradient(circle, rgba(230, 0, 0, 0.1) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
 
-          <h1 className="title-gradient" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
-            Congratulations!
-          </h1>
-          
-          <div className="stats-info">
-            You solved the question in <span>{timeElapsed}s</span> using <span>{guessesMade}</span> guesses!
+      {/* Animated Graphic Indicator */}
+      <div className="animation-container">
+        {won ? (
+          <div className="success-halo">
+            <svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
           </div>
-        </>
-      ) : (
-        // FAILURE CASE
-        <>
-          <div className="animation-container">
-            <div className="failure-halo">
-              <svg viewBox="0 0 24 24">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </div>
+        ) : (
+          <div className="failure-halo">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </div>
-
-          <h1 className="title-gradient" style={{ fontSize: '2.5rem', marginBottom: '1rem', background: 'linear-gradient(135deg, #ffffff 10%, #f43f5e 100%)', webkitBackgroundClip: 'text', webkitTextFillColor: 'transparent' }}>
-            Better Luck Next Time!
-          </h1>
-          
-          <div className="stats-info" style={{ fontSize: '1.15rem', color: '#94a3b8' }}>
-            You ran out of time or used up all 5 attempts. Don't worry, you can always try again!
-          </div>
-        </>
-      )}
-
-      <div style={{ zIndex: 10, marginTop: '1rem' }}>
-        <button 
-          className="btn-secondary" 
-          onClick={onReset}
-          aria-label="Restart the application flow"
-        >
-          Reset Game
-        </button>
+        )}
       </div>
+
+      {/* Title Message */}
+      <h1
+        className="title-gradient"
+        style={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+      >
+        {won ? "Congratulations!" : "Better luck next time"}
+      </h1>
+
+      <p
+        style={{
+          color: "#94a3b8",
+          fontSize: "1.2rem",
+          maxWidth: "460px",
+          margin: "0 auto 2rem auto",
+          lineHeight: "1.6",
+        }}
+      >
+        {won
+          ? "Amazing job! You connected the technologies correctly!"
+          : "You couldn't find the correct answers in time"}
+      </p>
+
+      {/* Stats display */}
+      <div className="stats-info">
+        Time taken: <span>{timeElapsed.toFixed(1)}s</span>
+        <span style={{ margin: "0 15px", color: "#475569" }}>|</span>
+        Guesses made: <span>{guessesMade}</span>
+      </div>
+
+      {/* Reset button to start over */}
+      <button
+        className="btn-primary"
+        onClick={onReset}
+        style={{ marginTop: "1rem" }}
+        aria-label="Play DevTalks Trivia again"
+      >
+        <span>Play Again</span>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+        </svg>
+      </button>
     </div>
   );
 }

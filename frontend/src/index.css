@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap");
 
 :root {
   --bg-primary: #070b19;
@@ -6,20 +6,20 @@
   --accent-blue: #00d2ff;
   --accent-purple: #7928ca;
   --accent-pink: #ff007a;
-  
+
   --success-green: #00ff87;
   --success-glow: rgba(0, 255, 135, 0.6);
   --error-red: #ff3838;
   --error-glow: rgba(255, 56, 56, 0.6);
   --warning-yellow: #ffcc00;
   --warning-glow: rgba(255, 204, 0, 0.6);
-  
+
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-hover: rgba(255, 255, 255, 0.07);
-  
-  --font-heading: 'Space Grotesk', sans-serif;
-  --font-body: 'Outfit', sans-serif;
+
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "Outfit", sans-serif;
 }
 
 * {
@@ -30,10 +30,22 @@
 
 body {
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 50% 10%, rgba(0, 210, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 10% 90%, rgba(121, 40, 202, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 90% 90%, rgba(255, 0, 122, 0.05) 0%, transparent 50%);
+  background-image:
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(0, 210, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      rgba(121, 40, 202, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 90% 90%,
+      rgba(255, 0, 122, 0.05) 0%,
+      transparent 50%
+    );
   background-attachment: fixed;
   color: #f1f5f9;
   font-family: var(--font-body);
@@ -76,7 +88,7 @@ body {
 }
 
 .glass-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -50%;
@@ -99,7 +111,12 @@ body {
   font-size: 2.8rem;
   letter-spacing: -1px;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #ffffff 10%, #a5b4fc 50%, var(--accent-blue) 100%);
+  background: linear-gradient(
+    135deg,
+    #ffffff 10%,
+    #a5b4fc 50%,
+    var(--accent-blue) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
@@ -116,7 +133,12 @@ body {
 
 /* Custom Premium Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent-purple) 50%,
+    var(--accent-pink) 100%
+  );
   border: none;
   border-radius: 50px;
   color: white;
@@ -125,7 +147,9 @@ body {
   font-size: 1.15rem;
   padding: 1.2rem 2.8rem;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3), inset 0 2px 2px rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 10px 25px rgba(0, 210, 255, 0.3),
+    inset 0 2px 2px rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: flex;
   align-items: center;
@@ -135,20 +159,27 @@ body {
 }
 
 .btn-primary::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
 
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(0, 210, 255, 0.45), 0 0 15px rgba(121, 40, 202, 0.4);
+  box-shadow:
+    0 15px 35px rgba(0, 210, 255, 0.45),
+    0 0 15px rgba(121, 40, 202, 0.4);
 }
 
 .btn-primary:hover::after {
@@ -189,13 +220,22 @@ body {
 
 @keyframes pulseRipple {
   0% {
-    box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.2), 0 0 0 10px rgba(0, 210, 255, 0.1), 0 0 0 20px rgba(0, 210, 255, 0.05);
+    box-shadow:
+      0 0 0 0 rgba(0, 210, 255, 0.2),
+      0 0 0 10px rgba(0, 210, 255, 0.1),
+      0 0 0 20px rgba(0, 210, 255, 0.05);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(0, 210, 255, 0.25), 0 0 0 20px rgba(121, 40, 202, 0.15), 0 0 0 35px rgba(0, 210, 255, 0);
+    box-shadow:
+      0 0 0 8px rgba(0, 210, 255, 0.25),
+      0 0 0 20px rgba(121, 40, 202, 0.15),
+      0 0 0 35px rgba(0, 210, 255, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.2), 0 0 0 10px rgba(0, 210, 255, 0.1), 0 0 0 20px rgba(0, 210, 255, 0.05);
+    box-shadow:
+      0 0 0 0 rgba(0, 210, 255, 0.2),
+      0 0 0 10px rgba(0, 210, 255, 0.1),
+      0 0 0 20px rgba(0, 210, 255, 0.05);
   }
 }
 
@@ -216,16 +256,35 @@ body {
   line-height: 1.5;
   font-weight: 600;
   color: #e2e8f0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* 4x4 Technology Grid */
+/* 5x3 / 3x5 Technology Grid */
 .tech-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* Default to horizontal */
   grid-gap: 16px;
   width: 100%;
   margin-bottom: 2rem;
+}
+
+/* Horizontal layout */
+@media (orientation: landscape) {
+  .tech-grid {
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 16px;
+    width: 100%;
+  }
+}
+
+/* Vertical layout */
+@media (orientation: portrait) {
+  .tech-grid {
+    grid-template-columns: repeat(3, 1fr);
+    /* width: 70%; */
+    /* row-gap: 16px; */
+    /* column-gap: 40px; */
+  }
 }
 
 @media (max-width: 600px) {
@@ -263,8 +322,8 @@ body {
 }
 
 .tech-card .icon-holder {
-  width: 65%;
-  height: 65%;
+  width: 50%;
+  height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -296,6 +355,17 @@ body {
 
 .tech-card:hover:not(.locked) .tech-label {
   color: #f1f5f9;
+}
+
+/* Vertical layout */
+@media (orientation: portrait) {
+  .tech-card {
+    aspect-ratio: 0;
+  }
+
+  .tech-card .icon-holder {
+    margin-bottom: 10px;
+  }
 }
 
 /* Answer Glow Feedbacks */
@@ -348,9 +418,18 @@ body {
 }
 
 @keyframes shakeCard {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 /* Floating Status / Counter Panel */
@@ -392,7 +471,7 @@ body {
 
 .timer-bg {
   fill: none;
-  stroke: rgba(255,255,255,0.05);
+  stroke: rgba(255, 255, 255, 0.05);
   stroke-width: 4;
 }
 
@@ -400,7 +479,9 @@ body {
   fill: none;
   stroke-width: 4;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.1s linear, stroke 0.5s ease;
+  transition:
+    stroke-dashoffset 0.1s linear,
+    stroke 0.5s ease;
 }
 
 .timer-text {
@@ -408,7 +489,7 @@ body {
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .timer-text.urgent {
@@ -416,8 +497,14 @@ body {
 }
 
 @keyframes blinkRed {
-  0% { color: #f1f5f9; transform: scale(1); }
-  100% { color: var(--error-red); transform: scale(1.12); }
+  0% {
+    color: #f1f5f9;
+    transform: scale(1);
+  }
+  100% {
+    color: var(--error-red);
+    transform: scale(1.12);
+  }
 }
 
 /* Screen 3 Congratulations & Sad Animations */
@@ -459,12 +546,19 @@ body {
 }
 
 @keyframes floatCheck {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-10px) scale(1.03); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.03);
+  }
 }
 
 @keyframes drawCheck {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* Floating Sad Face/Cross Halo */
@@ -495,10 +589,19 @@ body {
 }
 
 @keyframes weepSad {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(6px) rotate(-3deg); }
-  50% { transform: translateY(-4px) rotate(3deg); }
-  75% { transform: translateY(4px) rotate(-1deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(6px) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(3deg);
+  }
+  75% {
+    transform: translateY(4px) rotate(-1deg);
+  }
 }
 
 /* Canvas Confetti styling */
@@ -537,7 +640,7 @@ body {
   padding: 1rem 2.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:hover {
@@ -554,8 +657,14 @@ body {
 }
 
 @keyframes fadeInEffect {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Continuing block display */
@@ -567,6 +676,12 @@ body {
 }
 
 @keyframes pulseIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
