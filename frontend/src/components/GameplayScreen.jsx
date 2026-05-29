@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function GameplayScreen({ gameData, onGameFinished }) {
-  const { gameId, questionText, grid, correctCountNeeded } = gameData;
+  const { gameId, questionText, grid, correctAnswers, correctCountNeeded } = gameData;
 
   const [timeLeft, setTimeLeft] = useState(40);
   const [guesses, setGuesses] = useState({}); // techId -> { correct: boolean }
@@ -11,9 +11,14 @@ function GameplayScreen({ gameData, onGameFinished }) {
   const [won, setWon] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isNetworkLoading, setIsNetworkLoading] = useState(false);
-  const [correctAnswers, setCorrectAnswers] = useState([]); // Missed correct answers sheet
 
   const timerRef = useRef(null);
+  const timeLeftRef = useRef(40);
+
+  // Sync timeLeft ref to read it inside async callbacks
+  useEffect(() => {
+    timeLeftRef.current = timeLeft;
+  }, [timeLeft]);
 
   // 1. Timer Logic
   useEffect(() => {
@@ -39,21 +44,26 @@ function GameplayScreen({ gameData, onGameFinished }) {
     if (isCompleted) return;
     
     setIsNetworkLoading(true);
+    const finalGuesses = Object.keys(guesses);
     try {
-      const response = await fetch(`/api/game/timeout`, {
+      const response = await fetch(`/api/game/finish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId })
+        body: JSON.stringify({
+          gameId,
+          won: false,
+          timeElapsed: 40.0,
+          guesses: finalGuesses
+        })
       });
       const data = await response.json();
       
       setIsCompleted(true);
       setWon(false);
-      setTimeElapsed(data.timeElapsed || 40.0);
-      setCorrectAnswers(data.correctAnswers || []);
+      setTimeElapsed(40.0);
     } catch (error) {
-      console.error("Timeout request failed:", error);
-      // Fallback local timeout state
+      console.error("Timeout finish request failed:", error);
+      // Fallback local state
       setIsCompleted(true);
       setWon(false);
       setTimeElapsed(40.0);
@@ -62,50 +72,68 @@ function GameplayScreen({ gameData, onGameFinished }) {
     }
   };
 
-  // 3. Handle Card Click / Guess
+  // 3. Handle Card Click / Guess (Entirely on Frontend!)
   const handleCardClick = async (techId) => {
     // Guard clauses: ignore if completed, loading, already guessed, or guesses exhausted
     if (isCompleted || isNetworkLoading || techId in guesses || guessesMade >= 5) {
       return;
     }
 
-    setIsNetworkLoading(true);
-    try {
-      const response = await fetch(`/api/game/guess`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, techId })
-      });
-      
-      const data = await response.json();
-      
-      if (data.error && !data.isCompleted) {
-        alert(data.error);
-        return;
-      }
+    // 1. Check guess correctness against the client-side correctAnswers list
+    const isCorrect = correctAnswers.includes(techId);
+    const newGuesses = {
+      ...guesses,
+      [techId]: { correct: isCorrect }
+    };
+    
+    const newGuessesMade = guessesMade + 1;
+    const newAnswersFoundCount = answersFoundCount + (isCorrect ? 1 : 0);
 
-      // Record the guess result
-      setGuesses((prev) => ({
-        ...prev,
-        [techId]: { correct: data.correct }
-      }));
-      setGuessesMade(data.guessesMade);
-      setAnswersFoundCount(data.foundAnswersCount);
+    // Update local state instantly
+    setGuesses(newGuesses);
+    setGuessesMade(newGuessesMade);
+    setAnswersFoundCount(newAnswersFoundCount);
 
-      // Check if session completed (won or guesses exhausted or backend timeout)
-      if (data.isCompleted) {
+    const calculatedTimeElapsed = parseFloat((40 - timeLeftRef.current).toFixed(2));
+
+    // 2. Check Game Winning/Losing Conditions
+    // Condition A: SUCCESS - User found exactly 3 correct answers (any 3)
+    const hasWonGame = newAnswersFoundCount === 3;
+
+    // Condition B: FAILURE - Guesses exhausted (5 guesses used) without finding 3 correct answers
+    const guessesExhausted = newGuessesMade >= 5 && !hasWonGame;
+
+    if (hasWonGame || guessesExhausted) {
+      // Stop the timer instantly
+      if (timerRef.current) clearInterval(timerRef.current);
+      
+      setIsNetworkLoading(true);
+      try {
+        const finalGuessesList = Object.keys(newGuesses);
+        const response = await fetch(`/api/game/finish`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            gameId,
+            won: hasWonGame,
+            timeElapsed: calculatedTimeElapsed,
+            guesses: finalGuessesList
+          })
+        });
+        const data = await response.json();
+        
         setIsCompleted(true);
         setWon(data.won);
         setTimeElapsed(data.timeElapsed);
-        setCorrectAnswers(data.correctAnswers || []);
-        
-        // Stop the timer instantly as requested
-        if (timerRef.current) clearInterval(timerRef.current);
+      } catch (error) {
+        console.error("Finish request failed:", error);
+        // Fallback local completion
+        setIsCompleted(true);
+        setWon(hasWonGame);
+        setTimeElapsed(calculatedTimeElapsed);
+      } finally {
+        setIsNetworkLoading(false);
       }
-    } catch (error) {
-      console.error("Guess validation failed:", error);
-    } finally {
-      setIsNetworkLoading(false);
     }
   };
 
@@ -162,13 +190,13 @@ function GameplayScreen({ gameData, onGameFinished }) {
         </div>
       </div>
 
-      {/* 4x4 Technology Grid */}
+      {/* 5x3 / 3x5 Technology Grid */}
       <div className="tech-grid">
         {grid.map((tech) => {
           const isGuessed = tech.id in guesses;
           const isCorrect = isGuessed && guesses[tech.id].correct;
           const isIncorrect = isGuessed && !guesses[tech.id].correct;
-          const isCorrectHighlight = isCompleted && !isGuessed && correctAnswers.includes(tech.id);
+          const isCorrectHighlight = isCompleted && !isGuessed && !won && correctAnswers.includes(tech.id);
 
           return (
             <button

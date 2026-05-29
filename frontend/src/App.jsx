@@ -49,42 +49,34 @@ function App() {
   // Render Loader during game initiation
   if (isLoading) {
     return (
-      <div className="glass-panel fade-in" style={{ padding: '4rem', display: 'flex', gap: '20px' }}>
+      <div className="glass-panel fade-in" style={{ padding: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
         <div 
+          className="loading-spinner"
           style={{
             width: '50px',
             height: '50px',
             border: '4px solid rgba(255, 255, 255, 0.08)',
-            borderTop: '4px solid var(--accent-blue)',
+            borderTop: '4px solid var(--accent-red)',
             borderRadius: '50%',
-            animation: 'spinLoader 1s linear infinite'
+            animation: 'spin 1s linear infinite'
           }}
         />
-        <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', fontWeight: 600, color: '#94a3b8' }}>
-          Initializing Board...
-        </div>
-        
-        {/* Loader Animation Node */}
-        <style dangerouslySetInnerHTML={{__html: `
-          @keyframes spinLoader {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}} />
+        <p style={{ color: '#94a3b8', fontStyle: 'italic' }}>Retrieving trivia board from database...</p>
       </div>
     );
   }
 
-  // Render current active screen
-  switch (screen) {
-    case 'game':
-      return <GameplayScreen gameData={gameData} onGameFinished={handleGameFinished} />;
-    case 'result':
-      return <ResultScreen gameResult={gameResult} onReset={handleResetGame} />;
-    case 'start':
-    default:
-      return <StartScreen onStart={handleStartGame} />;
-  }
+  return (
+    <>
+      {screen === 'start' && <StartScreen onStart={handleStartGame} />}
+      {screen === 'game' && gameData && (
+        <GameplayScreen gameData={gameData} onGameFinished={handleGameFinished} />
+      )}
+      {screen === 'result' && gameResult && (
+        <ResultScreen gameResult={gameResult} onReset={handleResetGame} />
+      )}
+    </>
+  );
 }
 
 export default App;
